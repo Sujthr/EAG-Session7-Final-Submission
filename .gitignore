@@ -1,0 +1,40 @@
+# ── Secrets — NEVER commit these ──────────────────────────────────────────────
+.env
+Gateway/.env
+
+# ── Runtime state (rebuilt automatically) ────────────────────────────────────
+S7Code/S7code/state/
+S7Code/S7code/logs/
+S7Code/S7code/traces/
+S7Code/S7code/usage.json
+Gateway/llm_gatewayV7/gateway_v7.db
+*.gateway.pid
+.gateway.pid
+
+# ── Sandbox runtime files (keep papers corpus, ignore everything else) ────────
+S7Code/S7code/sandbox/*
+!S7Code/S7code/sandbox/papers/
+
+# ── Windows shortcut files (generated locally by create_shortcuts.ps1) ────────
+*.lnk
+
+# ── Python ────────────────────────────────────────────────────────────────────
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+.env/
+*.egg-info/
+dist/
+build/
+
+# ── uv ────────────────────────────────────────────────────────────────────────
+# uv.lock is intentionally tracked for reproducible installs.
+# Uncomment the next line only if you want to exclude it.
+# uv.lock
+
+# ── OS noise ──────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
