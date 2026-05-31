@@ -26,6 +26,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import os
 import sys
 import uuid
 from pathlib import Path
@@ -74,7 +75,13 @@ async def run(query: str) -> str:
     except Exception as e:
         print(f"[memory.remember] skipped: {e}")
 
-    server_params = StdioServerParameters(command=sys.executable, args=[str(MCP_SERVER)])
+    # Force UTF-8 I/O in the MCP subprocess so Unicode chars (e.g. → \u2192)
+    # in fetched web content don't crash on Windows cp1252 stdout.
+    server_params = StdioServerParameters(
+        command=sys.executable,
+        args=[str(MCP_SERVER)],
+        env={**os.environ, "PYTHONIOENCODING": "utf-8"},
+    )
     history: list[dict] = []
     prior_goals: list[Goal] = []
     final_answer: str = ""
@@ -149,6 +156,34 @@ async def run(query: str) -> str:
                 # 4. ACTION
                 tc = out.tool_call
                 print(f"[decision]      TOOL_CALL: {tc.name}({json.dumps(tc.arguments)[:120]})")
+
+                # Hard dedup: if the exact same tool+args already ran, skip
+                # re-execution and inject a cached reference so Decision can
+                # answer directly on the next iteration without fetching again.
+                prior_action = next(
+                    (h for h in history
+                     if h.get("kind") == "action"
+                     and h.get("tool") == tc.name
+                     and h.get("arguments") == tc.arguments),
+                    None,
+                )
+                if prior_action:
+                    print(f"[dedup]         {tc.name} already ran in iter "
+                          f"{prior_action['iter']} — using cached result")
+                    history.append({
+                        "iter": it,
+                        "kind": "action",
+                        "goal_id": goal.id,
+                        "tool": tc.name,
+                        "arguments": tc.arguments,
+                        "result_descriptor": (
+                            f"[CACHED from iter {prior_action['iter']} — do not call again] "
+                            + prior_action.get("result_descriptor", "")
+                        ),
+                        "artifact_id": prior_action.get("artifact_id"),
+                    })
+                    continue
+
                 result_text, art_id = await action.execute(session, tc)
                 preview = result_text[:200].replace("\n", " ")
                 print(f"[action]        → {preview}{'...' if len(result_text) > 200 else ''}"

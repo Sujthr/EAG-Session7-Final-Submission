@@ -120,12 +120,13 @@ def _format_history(history: list[dict]) -> str:
     if not history:
         return "  (empty)"
     lines = []
-    for h in history[-6:]:
+    for h in history[-10:]:
         kind = h.get("kind", "?")
         if kind == "answer":
             lines.append(f"  - iter {h.get('iter')}: ANSWER → {(h.get('text') or '')[:140]}")
         elif kind == "action":
             tool = h.get("tool")
+            args_str = json.dumps(h.get("arguments", {}))[:80]
             # NOTES_RUNS §6 (1): agent7.py already clips result_descriptor at
             # 300 chars; clipping again at 140 here was hiding the tail of
             # multi-entry tool outputs like list_dir's file list, and Decision
@@ -133,7 +134,7 @@ def _format_history(history: list[dict]) -> str:
             # 300-char ceiling so the model sees everything that was stored.
             desc = h.get("result_descriptor", "")[:300]
             art = f" (artifact {h['artifact_id']})" if h.get("artifact_id") else ""
-            lines.append(f"  - iter {h.get('iter')}: {tool}{art} → {desc}")
+            lines.append(f"  - iter {h.get('iter')}: {tool}({args_str}){art} → {desc}")
         else:
             lines.append(f"  - iter {h.get('iter')}: {kind} {h}")
     return "\n".join(lines)
