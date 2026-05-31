@@ -188,11 +188,13 @@ def observe(
     # Synthesis-type goals require Decision to actually produce a
     # substantive answer; we won't let Perception declare them done on the
     # strength of a tool-call alone.
+    # Only true reasoning/aggregation operations need a substantive answer.
+    # Lookup verbs ("extract", "find", "name", etc.) produce short but valid
+    # answers (e.g. a date), so they must NOT be in this list.
     SYNTHESIS_KW = (
         "evaluate", "select", "synthes", "compare", "decide", "recommend",
         "tell me which", "most appropriate", "analy", "pick", "choose",
-        "summarise", "summarize", "answer", "identify", "find", "determine",
-        "extract", "list", "report", "tell", "explain", "describe", "name",
+        "summarise", "summarize",
     )
 
     # Goal-count invariant: never contract, never reorder. Prior goals keep
@@ -234,7 +236,7 @@ def observe(
                 has_answer = any(
                     h.get("kind") == "answer"
                     and h.get("goal_id") == gid
-                    and len((h.get("text") or "")) > 60
+                    and len((h.get("text") or "")) > 10
                     for h in history
                 )
                 if not has_answer:
