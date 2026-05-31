@@ -69,6 +69,28 @@ streamlit run app.py          # opens http://localhost:8501
 | `S7Code/S7code/sandbox/papers/` | 55-document corpus (.md files) |
 | `S7Code/S7code/state/` | Persisted memory (survives restarts) |
 
+## Sample Run — Claude Shannon (Run `7a9d48f7`)
+
+**Query:** Fetch https://en.wikipedia.org/wiki/Claude_Shannon and tell me his birth date, death date, and three key contributions to information theory.
+
+**Result:** 2 iterations · 67.9s
+
+| Iter | Action |
+|------|--------|
+| 1 | `fetch_url` → Wikipedia page fetched, artifact stored |
+| 2 | `ANSWER` → full answer produced from artifact |
+
+**Answer:**
+> Claude Shannon was born on **April 30, 1916**, and died on **February 24, 2001**. He is known as the "father of information theory." Three key contributions:
+>
+> 1. Founding the field of information theory, which mathematically models communication and information transmission.
+> 2. Laying the theoretical foundations for digital circuits and communication systems.
+> 3. Developing concepts such as the minimax procedure for computer chess and applying information theory principles to game theory and cryptography.
+
+Full iteration-level traces for all runs: `S7Code/S7code/traces/query_traces.md`
+
+---
+
 ## Full Documentation
 
 See [RUNBOOK.md](RUNBOOK.md) for:
