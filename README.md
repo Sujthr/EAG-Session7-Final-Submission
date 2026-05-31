@@ -69,32 +69,57 @@ streamlit run app.py          # opens http://localhost:8501
 | `S7Code/S7code/sandbox/papers/` | 55-document corpus (.md files) |
 | `S7Code/S7code/state/` | Persisted memory (survives restarts) |
 
-## Sample Run — Claude Shannon (Run `7a9d48f7`)
+## Sample Run — Run `7a9d48f7` — 2026-05-31 17:18:24 UTC
 
 **Query:** Fetch https://en.wikipedia.org/wiki/Claude_Shannon and tell me his birth date, death date, and three key contributions to information theory.
 
-**Result:** 2 iterations · 67.9s
+**Duration:** 67.9s &nbsp;|&nbsp; **Iterations:** 2 &nbsp;|&nbsp; **Memory hits (final iter):** 8
 
-| Iter | Action |
-|------|--------|
-| 1 | `fetch_url` → Wikipedia page fetched, artifact stored |
-| 2 | `ANSWER` → full answer produced from artifact |
+### Iteration 1
 
-**Answer:**
-> Claude Shannon was born on **April 30, 1916**, and died on **February 24, 2001**. He is known as the "father of information theory." Three key contributions:
+| Memory hits | 8 |
+|---|---|
+
+**Goals:**
+
+- ✓ `g:9ceeff54` — Fetch the Wikipedia page for Claude Shannon
+- ○ `g:ae0b82f4` — Extract Claude Shannon's birth date, death date, and three key contributions to information theory from the page
+- ○ `g:a4dfe6c1` — Summarise Claude Shannon's birth date, death date, and three key contributions to information theory
+
+**Decision:** `ANSWER`
+
+> Claude Shannon was born on April 30, 1916, and died on February 24, 2001. He is known as the "father of information theory." Three key contributions of Claude Shannon to information theory include:
+>
+> 1. Founding the field of information theory, which transformed modern conceptions of communication, randomness, and information.
+> 2. Laying the theoretical foundations for digital circuits and communication systems.
+
+### Iteration 2
+
+| Memory hits | 8 |
+|---|---|
+
+**Goals:**
+
+- ✓ `g:9ceeff54` — Fetch the Wikipedia page for Claude Shannon
+- ✓ `g:ae0b82f4` — Extract Claude Shannon's birth date, death date, and three key contributions to information theory from the page
+- ○ `g:a4dfe6c1` — Summarise Claude Shannon's birth date, death date, and three key contributions to information theory
+
+**Decision:** `ANSWER`
+
+> Claude Shannon was born on April 30, 1916, and died on February 24, 2001. He is known as the "father of information theory." Three key contributions of Claude Shannon to information theory include:
 >
 > 1. Founding the field of information theory, which mathematically models communication and information transmission.
 > 2. Laying the theoretical foundations for digital circuits and communication systems.
 > 3. Developing concepts such as the minimax procedure for computer chess and applying information theory principles to game theory and cryptography.
 
-Full iteration-level traces for all runs: `S7Code/S7code/traces/query_traces.md`
-
 ---
 
-## Full Documentation
+**Final Answer:**
 
-See [RUNBOOK.md](RUNBOOK.md) for:
-- Prerequisites and one-time setup
-- All 8 mandatory queries (A–H)
-- Troubleshooting guide
-- RAG vs no-RAG comparison
+> Claude Shannon was born on April 30, 1916, and died on February 24, 2001. He is known as the "father of information theory." Three key contributions of Claude Shannon to information theory include:
+>
+> 1. Founding the field of information theory, which mathematically models communication and information transmission.
+> 2. Laying the theoretical foundations for digital circuits and communication systems.
+> 3. Developing concepts such as the minimax procedure for computer chess and applying information theory principles to game theory and cryptography.
+>
+> These contributions have profoundly influenced modern communication, digital electronics, and cryptography.
